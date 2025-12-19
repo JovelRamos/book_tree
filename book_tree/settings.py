@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     #my apps
     'book_trees',
 
+    #third party apps
+
     #default django apps
     'django.contrib.admin',
     'django.contrib.auth',
