@@ -1,10 +1,13 @@
 import ebooklib
 import re
+import spacy
 from ebooklib import epub
 from bs4 import BeautifulSoup
 from django.db import transaction
 from .models import EpubFile, Chapter, Character, Relationship
 
+# load NLP
+nlp = spacy.load("en_core_web_sm")
 
 def extract_chapters_from_epub(epub_path):
     """Extract chapters and text from an EPUB file."""
@@ -23,7 +26,7 @@ def extract_chapters_from_epub(epub_path):
                 chapters.append({
                     'chapter_number': chapter_number,
                     'title': item.get_name(),
-                    'content': text[:250]
+                    'content': text
                 })
 
     return chapters
@@ -64,6 +67,52 @@ def process_epub_file(epub_id):
             epub.save()
         raise
 
+def extract_characters_simple(epub_id):
+    """
+    Placeholder for character extraction.
+    This will be implemented with spaCy/NLP later.
+    """
+    # TODO: Implement NER-based character extraction
+    epub = EpubFile.objects.get(id=epub_id)
+    chapters = epub.chapters.all()
 
+    character_counts = {}
+    first_appearance = {}
+
+
+    for chapter in chapters:
+        doc = nlp(chapter.content)
+
+        for ent in doc.ents:
+            if ent.label_ == 'PERSON':
+                name = ent.text.strip()
+
+                #skip single letters, common false positive
+                if len(name) <= 1:
+                    continue
+
+                character_counts[name] = character_counts.get(name, 0) + 1
+
+                if name not in first_appearance:
+                    first_appearance[name] = chapter.chapter_number
+
+    # TODO: Create & save objects
+    # for name, count in character_counts.items():
+    #     Character.objects.update_or_create(
+    #
+    #     )
+
+    print (character_counts)
+
+    pass
+
+
+def extract_relationships_simple(epub_id):
+    """
+    Placeholder for relationship extraction.
+    This will be implemented with pattern matching or LLM later.
+    """
+    # TODO: Implement relationship extraction
+    pass
 
 

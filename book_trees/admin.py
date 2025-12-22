@@ -5,7 +5,7 @@ from .models import EpubFile, Chapter, Character, Relationship
 
 @admin.register(EpubFile)
 class EpubFileAdmin(admin.ModelAdmin):
-    list_display = ['original_filename', 'status', 'uploaded_at', 'processed']
+    list_display = ['original_filename', 'status', 'uploaded_at', 'processed', 'id']
     list_filter =  ['status', 'processed', 'uploaded_at']
     search_fields = ['original_filename']
     readonly_fields = ['uploaded_at']

@@ -4,6 +4,7 @@ Management command to process pending EPUB files
 Usage:
     python3 manage.py process_epubs
     python manage.py process_epubs --epub-id 5
+        python3 manage.py process_epubs --reprocess
 """
 
 from django.core.management.base import BaseCommand
